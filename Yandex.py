@@ -22,23 +22,26 @@ class MedicineReminder(QWidget):
         self.medication_description = QTextEdit(self)
         self.event_list = QListWidget(self)
         self.add_button = QPushButton("Добавить", self)
+        self.delete_button = QPushButton("Удалить", self)
 
         main_layout = QVBoxLayout()
         top_layout = QHBoxLayout()
-        bottom_layout = QHBoxLayout()
+        bottom_layout = QVBoxLayout()
 
         top_layout.addWidget(self.calendar)
         top_layout.addWidget(self.time_edit)
         bottom_layout.addWidget(self.medication_description)
         bottom_layout.addWidget(self.event_list)
         bottom_layout.addWidget(self.add_button)
+        bottom_layout.addWidget(self.delete_button)
 
         main_layout.addLayout(top_layout)
         main_layout.addLayout(bottom_layout)
-
         self.setLayout(main_layout)
 
         self.add_button.clicked.connect(self.add_event)
+        self.delete_button.clicked.connect(self.delete_event)
+
         self.all_dates = {}
 
     def add_event(self):
@@ -47,11 +50,18 @@ class MedicineReminder(QWidget):
         description = self.medication_description.toPlainText()
 
         self.all_dates[f'{date} {time}'] = description
-
         self.medication_description.clear()
         self.event_list.clear()
+
         for key in sorted(self.all_dates.keys()):
             self.event_list.addItem(f'{key} - {self.all_dates[key]}')
+
+    def delete_event(self):
+        selected_item = self.event_list.currentItem()
+        if selected_item:
+            key = selected_item.text().split(" - ")[0]
+            del self.all_dates[key]
+            self.event_list.takeItem(self.event_list.row(selected_item))
 
 
 if __name__ == "__main__":

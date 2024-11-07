@@ -236,8 +236,7 @@ class EditMedicineDialog(QDialog):
 
     def save_changes(self):
         medicine_name = self.medicine_combobox.currentText()
-        dosage = self.dosage_edit\
-.text()
+        dosage = self.dosage_edit.text()
         date = self.date_edit.date().toString("yyyy-MM-dd")
         time = self.time_edit.time().toString("HH:mm")
         medicine_data = {
